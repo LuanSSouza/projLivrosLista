@@ -70,7 +70,7 @@ namespace projLivrosLista
             Console.WriteLine("Total de exemplares: " + livro.qtdeExemplares());
             Console.WriteLine("Total de exemplares disponíveis: " + livro.qtdeDisponiveis());
             Console.WriteLine("Total de empréstimos: " + livro.qtdeEmprestimos());
-            Console.WriteLine("Percentual de disponibilidade: " + livro.percDisponibilidade());
+            Console.WriteLine("Percentual de disponibilidade: " + livro.percDisponibilidade() + "%");
 
             Console.ReadKey();
         }
@@ -86,7 +86,7 @@ namespace projLivrosLista
             Console.WriteLine("Total de exemplares: " + livro.qtdeExemplares());
             Console.WriteLine("Total de exemplares disponíveis: " + livro.qtdeDisponiveis());
             Console.WriteLine("Total de empréstimos: " + livro.qtdeEmprestimos());
-            Console.WriteLine("Percentual de disponibilidade: " + livro.percDisponibilidade());
+            Console.WriteLine("Percentual de disponibilidade: " + livro.percDisponibilidade() + "%");
 
             livro.Exemplares.ForEach( i => {
                 Console.WriteLine("----------------------------------------------------------");
@@ -133,7 +133,7 @@ namespace projLivrosLista
 
             Livro livro = livros.pesquisar(new Livro(isbn, "", "", ""));
 
-            Exemplar exemplar = livro.Exemplares[livro.qtdeExemplares() - 1];
+            Exemplar exemplar = livro.Exemplares.FirstOrDefault(i => !i.disponivel());
             if (exemplar != null) exemplar.devolver();
         }
     }

@@ -56,5 +56,12 @@ namespace projLivrosLista.Models
         {
             return this.emprestimos.Count;
         }
+        
+        public override bool Equals(Object obj)
+        {
+            if (obj.GetType() == this.GetType())
+                return this.tombo == ((Exemplar)obj).Tombo;
+            return false;
+        }
     }
 }

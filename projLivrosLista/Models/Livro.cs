@@ -48,7 +48,7 @@ namespace projLivrosLista.Models
         }
 
         public double percDisponibilidade() {
-            double percentual = (this.qtdeExemplares() == 0 || this.qtdeDisponiveis() == 0) ?0:this.qtdeExemplares() / this.qtdeDisponiveis();
+            double percentual = (this.qtdeExemplares() == 0 || this.qtdeDisponiveis() == 0) ?0:(this.qtdeDisponiveis()/ this.qtdeExemplares()) * 100;
             return percentual;
         }
 
