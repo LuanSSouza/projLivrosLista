@@ -35,13 +35,19 @@ namespace projLivrosLista.Models
         }
 
         public bool emprestar() {
-            this.emprestimos.Add(new Emprestimo(DateTime.Now));
-            return true;
+            if (this.disponivel()) {
+                this.emprestimos.Add(new Emprestimo(DateTime.Now));
+                return true;
+            }
+            return false;
         }
 
         public bool devolver() {
-            this.emprestimos[this.emprestimos.Count - 1].DtDevolucao = DateTime.Now;
-            return true;
+            if (!this.disponivel()) {
+                this.emprestimos[this.emprestimos.Count - 1].DtDevolucao = DateTime.Now;
+                return true;
+            }
+            return false;
         }
 
         public bool disponivel()

@@ -18,6 +18,7 @@ namespace projLivrosLista.Controller
         }
 
         public void adicionar(Livro livro) {
+            if (this.pesquisar(livro) != null) throw new Exception("Já existe um livro com esse ISBN.");
             this.acervo.Add(livro);
         }
 

@@ -27,17 +27,24 @@ namespace projLivrosLista
                               "6. Registrar devolução\n\n");
 
                 Console.Write("Digite uma opção: ");
-                op = Console.ReadLine();
+                try {
+                    op = Console.ReadLine();
 
-                switch (op){
-                    case "0": break;
-                    case "1": adicionarLivro(); break;
-                    case "2": pesquisarLivroSintetico(); break;
-                    case "3": pesquisarLivroAnalitico(); break;
-                    case "4": adicionarExemplar(); break;
-                    case "5": registrarEmprestimo(); break;
-                    case "6": registrarDevolucao(); break;
-                    default: Console.WriteLine("Opção inválida."); break;
+                    switch (op)
+                    {
+                        case "0": break;
+                        case "1": adicionarLivro(); break;
+                        case "2": pesquisarLivroSintetico(); break;
+                        case "3": pesquisarLivroAnalitico(); break;
+                        case "4": adicionarExemplar(); break;
+                        case "5": registrarEmprestimo(); break;
+                        case "6": registrarDevolucao(); break;
+                        default: Console.WriteLine("Opção inválida."); break;
+                    }
+                }
+                catch (Exception e) {
+                    Console.WriteLine(e.Message);
+                    Console.ReadKey(); 
                 }
             } while (op != "0");
 
@@ -45,10 +52,11 @@ namespace projLivrosLista
         }
 
         static void adicionarLivro() {
-            Console.Clear();
 
-            Console.Write("Digite o ISBN: ");
+            Console.Write("\nDigite o ISBN: ");
             int isbn = Int32.Parse(Console.ReadLine());
+            if (livros.pesquisar(new Livro(isbn)) != null) throw new Exception("Já existe um livro com esse ISBN");
+
             Console.Write("Digite o título: ");
             string titulo = Console.ReadLine();
             Console.Write("Digite o autor: ");
@@ -57,32 +65,34 @@ namespace projLivrosLista
             string editora = Console.ReadLine();
 
             livros.adicionar(new Livro(isbn, titulo, autor, editora));
+            Console.WriteLine("Exemplar cadastrado com sucesso!");
+            Console.ReadKey();
         }
 
         static void pesquisarLivroSintetico()
         {
-            Console.Clear();
 
-            Console.Write("Digite o ISBN: ");
+            Console.Write("\nDigite o ISBN: ");
             int isbn = Int32.Parse(Console.ReadLine());
+            Livro livro = livros.pesquisar(new Livro(isbn));
+            if (livro == null) throw new Exception("Livro não encontrado.");
 
-            Livro livro = livros.pesquisar(new Livro(isbn, "", "", ""));
             Console.WriteLine("Total de exemplares: " + livro.qtdeExemplares());
             Console.WriteLine("Total de exemplares disponíveis: " + livro.qtdeDisponiveis());
             Console.WriteLine("Total de empréstimos: " + livro.qtdeEmprestimos());
-            Console.WriteLine("Percentual de disponibilidade: " + livro.percDisponibilidade() + "%");
+            Console.WriteLine("Percentual de disponibilidade: " + livro.percDisponibilidade().ToString("0.00") + "%");
 
             Console.ReadKey();
         }
 
         static void pesquisarLivroAnalitico()
         {
-            Console.Clear();
 
-            Console.Write("Digite o ISBN: ");
+            Console.Write("\nDigite o ISBN: ");
             int isbn = Int32.Parse(Console.ReadLine());
+            Livro livro = livros.pesquisar(new Livro(isbn));
+            if (livro == null) throw new Exception("Livro não encontrado.");
 
-            Livro livro = livros.pesquisar(new Livro(isbn, "", "", ""));
             Console.WriteLine("Total de exemplares: " + livro.qtdeExemplares());
             Console.WriteLine("Total de exemplares disponíveis: " + livro.qtdeDisponiveis());
             Console.WriteLine("Total de empréstimos: " + livro.qtdeEmprestimos());
@@ -103,38 +113,45 @@ namespace projLivrosLista
 
         static void adicionarExemplar()
         {
-            Console.Clear();
 
-            Console.Write("Digite o ISBN: ");
+            Console.Write("\nDigite o ISBN: ");
             int isbn = Int32.Parse(Console.ReadLine());
 
-            Livro livro = livros.pesquisar(new Livro(isbn, "", "", ""));
+            Livro livro = livros.pesquisar(new Livro(isbn));
+            if (livro == null) throw new Exception("Livro não encontrado.");
 
             Console.Write("Digite o Tombo: ");
             int tombo = Int32.Parse(Console.ReadLine());
             livro.adicionarExemplar(new Exemplar(tombo));
+            Console.WriteLine("Exemplar cadastrado com sucesso!");
+            Console.ReadKey();
         }
 
         static void registrarEmprestimo()
         {
-            Console.Write("Digite o ISBN: ");
+            Console.Write("\nDigite o ISBN: ");
             int isbn = Int32.Parse(Console.ReadLine());
 
-            Livro livro = livros.pesquisar(new Livro(isbn, "", "", ""));
+            Livro livro = livros.pesquisar(new Livro(isbn));
+            if (livro == null) throw new Exception("Livro não encontrado.");
 
-            Exemplar exemplar = livro.Exemplares.FirstOrDefault(i => i.disponivel());
-            if (exemplar != null) exemplar.emprestar();
+            Exemplar exemplar = livro.Exemplares.FirstOrDefault(i => i.emprestar());
+            if (exemplar != null) Console.WriteLine("Exemplar " + exemplar.Tombo + " emprestado com sucesso!");
+            else throw new Exception("Não há exemplares disponíveis.");
         }
 
         static void registrarDevolucao()
         {
-            Console.Write("Digite o ISBN: ");
+            Console.Write("\nDigite o ISBN: ");
             int isbn = Int32.Parse(Console.ReadLine());
 
-            Livro livro = livros.pesquisar(new Livro(isbn, "", "", ""));
+            Livro livro = livros.pesquisar(new Livro(isbn));
+            if (livro == null) throw new Exception("Livro não encontrado.");
 
-            Exemplar exemplar = livro.Exemplares.FirstOrDefault(i => !i.disponivel());
-            if (exemplar != null) exemplar.devolver();
+            Exemplar exemplar = livro.Exemplares.FirstOrDefault(i => i.devolver());
+            if (exemplar != null) Console.WriteLine("Exemplar " + exemplar.Tombo + " devolvido com sucesso!"); 
+            else Console.WriteLine("Não há exemplares emprestados.");
+            Console.ReadKey();
         }
     }
 }

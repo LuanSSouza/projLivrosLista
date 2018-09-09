@@ -17,6 +17,9 @@ namespace projLivrosLista.Models
 
         public List<Exemplar> Exemplares { get { return this.exemplares; } }
 
+        // Apenas para pesquisas
+        public Livro(int i) { this.isbn = i;}
+
         public Livro(int i, string t, string a, string e) {
             this.isbn = i;
             this.titulo = t;
@@ -26,6 +29,8 @@ namespace projLivrosLista.Models
         }
 
         public void adicionarExemplar(Exemplar exemplar) {
+            foreach (Exemplar exemp in this.exemplares)
+                if (exemp.Equals(exemplar)) throw new Exception("Já existe um exemplar com este tombo.");
             this.exemplares.Add(exemplar);
         }
 
@@ -48,8 +53,9 @@ namespace projLivrosLista.Models
         }
 
         public double percDisponibilidade() {
-            double percentual = (this.qtdeExemplares() == 0 || this.qtdeDisponiveis() == 0) ?0:(this.qtdeDisponiveis()/ this.qtdeExemplares()) * 100;
-            return percentual;
+            double exemp = this.qtdeExemplares();
+            double disp = this.qtdeDisponiveis();
+            return (exemp == 0 || disp == 0) ? 0 : ( disp / exemp) * 100;
         }
 
         public override bool Equals(object obj)
