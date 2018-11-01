@@ -96,15 +96,16 @@ namespace projLivrosLista
             Console.WriteLine("Total de exemplares: " + livro.qtdeExemplares());
             Console.WriteLine("Total de exemplares disponíveis: " + livro.qtdeDisponiveis());
             Console.WriteLine("Total de empréstimos: " + livro.qtdeEmprestimos());
-            Console.WriteLine("Percentual de disponibilidade: " + livro.percDisponibilidade() + "%");
+            Console.WriteLine("Percentual de disponibilidade: " + livro.percDisponibilidade().ToString("0.00") + "%");
 
             livro.Exemplares.ForEach( i => {
-                Console.WriteLine("----------------------------------------------------------");
+                Console.WriteLine("=========================================================");
                 Console.WriteLine("Tombo: " + i.Tombo);
                 i.Emprestimos.ForEach(j => {
+                    String devolucao = (j.DtDevolucao != DateTime.MinValue) ? j.DtDevolucao.ToString() : "-------------------";
                     Console.WriteLine("----------------------------------------------------------");
                     Console.WriteLine("Data Empréstimo: " + j.DtEmprestimo);
-                    Console.WriteLine("Data Devolução: " + j.DtDevolucao);
+                    Console.WriteLine("Data Devolução:  " + devolucao);
                 });
             });
 
